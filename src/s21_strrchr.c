@@ -1,5 +1,5 @@
 #include "s21_string.h"
-
+//Little fix
 char *s21_strrchr(const char *str, int c) {
   char *s = s21_NULL;
   for (s21_size_t i = 0;; i++) {
