@@ -14,3 +14,4 @@ s21_size_t s21_strcspn(const char *str1, const char *str2);
 char *s21_strerror(int errorNumber);
 s21_size_t s21_strlen(const char *str);
 int s21_strncmp(const char *str1, const char *str2, s21_size_t n);
+char *s21_strncpy(char *dest, const char *src, s21_size_t n);
