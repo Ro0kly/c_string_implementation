@@ -19,3 +19,4 @@ char *s21_strpbrk(const char *str1, const char *str2);
 char *s21_strstr(const char *str, const char *podstr);
 char *s21_strtok(char *str, const char *delim);
 char *s21_strncat(char *dest, const char *src, s21_size_t n);
+char *s21_strchr(const char *str, int c);
