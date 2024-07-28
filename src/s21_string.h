@@ -21,3 +21,4 @@ char *s21_strtok(char *str, const char *delim);
 char *s21_strncat(char *dest, const char *src, s21_size_t n);
 char *s21_strchr(const char *str, int c);
 void *s21_to_lower(const char *str);
+void *s21_insert(const char *src, const char *str, size_t start_index);
