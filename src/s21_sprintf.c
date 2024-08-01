@@ -1,6 +1,14 @@
 #include "s21_string.h"
 
 char *s21_float_to_string(double x);
+char *s21_char_to_string(char x);
+
+char *s21_char_to_string(char x) {
+  char *str = (char *)malloc(2);
+  str[0] = x;
+  str[1] = '\0';
+  return str;
+}
 
 char *s21_float_to_string(double x) {
   int minus = 0;
