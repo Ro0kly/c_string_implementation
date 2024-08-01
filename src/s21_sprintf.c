@@ -2,7 +2,7 @@
 
 char *s21_float_to_string(double x);
 char *s21_char_to_string(char x);
-
+//int to str
 char *s21_char_to_string(char x) {
   char *str = (char *)malloc(2);
   str[0] = x;
