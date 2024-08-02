@@ -2,7 +2,36 @@
 
 char *s21_float_to_string(double x);
 char *s21_char_to_string(char x);
-//int to str
+char *s21_int_to_string(int x);
+
+char *s21_int_to_string(int x) {
+  int copy_x = x;
+  char *str = s21_NULL;
+  int len = 0;
+  if (x < 0) {
+    str = (char *)realloc(str, len + 1);
+    len++;
+    str[len - 1] = '-';
+    x = -x;
+  }
+  while (x > 0) {
+    str = (char *)realloc(str, len + 1);
+    len++;
+    str[len - 1] = '0' + (x % 10);
+    x /= 10;
+  }
+  if (copy_x == 0) {
+    str = (char *)realloc(str, len + 1);
+    len++;
+    str[len - 1] = '0';
+  }
+  str = (char *)realloc(str, len + 1);
+  len++;
+  str[len - 1] = '\0';
+  s21_reverse(str);
+  return str;
+}
+
 char *s21_char_to_string(char x) {
   char *str = (char *)malloc(2);
   str[0] = x;
