@@ -3,6 +3,20 @@
 char *s21_float_to_string(double x);
 char *s21_char_to_string(char x);
 char *s21_int_to_string(int x);
+void s21_reverse(char *str);
+
+void s21_reverse(char *str) {
+  int len = (int)s21_strlen(str);
+  int i = 0, j = len - 1, temp;
+  if (str[0] == '-') i = 1;
+  while (i < j) {
+    temp = str[i];
+    str[i] = str[j];
+    str[j] = temp;
+    i++;
+    j--;
+  }
+}
 
 char *s21_int_to_string(int x) {
   int copy_x = x;
