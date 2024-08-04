@@ -4,6 +4,55 @@ char *s21_float_to_string(double x);
 char *s21_char_to_string(char x);
 char *s21_int_to_string(int x);
 void s21_reverse(char *str);
+double s21_atof(const char *str);
+
+double s21_atof(const char *str) {
+  int ind = 0;
+  if (str[0] == '-' || str[0] == '+') {
+    ind = 1;
+  }
+  int ind_point = -1;
+  int kol_point = 0;
+  for (int i = ind; str[i] != '\0'; i++) {
+    if (str[i] == '.') {
+      ind_point = i;
+      kol_point++;
+    }
+  }
+  if (kol_point > 1) return 0;
+  double sum = 0;
+  if (ind_point != -1 && kol_point == 1) {
+    for (int i = ind; i < ind_point; i++) {
+      if ((str[i] <= '9' && str[i] >= '0') == 0) {
+        return 0;
+      }
+    }
+    for (int i = ind; i < ind_point; i++) {
+      sum = 10 * sum + (int)(str[i] - '0');
+    }
+    for (int i = ind_point + 1; str[i] != 0; i++) {
+      if ((str[i] <= '9' && str[i] >= '0') == 0) {
+        return 0;
+      }
+    }
+    int l = 10;
+    for (int i = ind_point + 1; str[i] != 0; i++) {
+      sum += (double)(str[i] - '0') / l;
+      l *= 10;
+    }
+  } else {
+    for (int i = ind; str[i] != 0; i++) {
+      if ((str[i] <= '9' && str[i] >= '0') == 0) {
+        return 0;
+      }
+    }
+    for (int i = ind; str[i] != 0; i++) {
+      sum = 10 * sum + (int)(str[i] - '0');
+    }
+  }
+  if (str[0] == '-') sum = -sum;
+  return sum;
+}
 
 void s21_reverse(char *str) {
   int len = (int)s21_strlen(str);
