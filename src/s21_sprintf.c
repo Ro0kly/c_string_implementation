@@ -5,6 +5,71 @@ char *s21_char_to_string(char x);
 char *s21_int_to_string(int x);
 void s21_reverse(char *str);
 double s21_atof(const char *str);
+char *s21_accuracy(term *t, char *value);
+
+char *s21_accuracy(term *t, char *value) {
+  if (t->accuracy != -1) {
+    int accuracy = t->accuracy;
+    if (accuracy <= 6) {
+      int i_point;
+      double our_numb = (double)s21_atof(value);
+      for (int i = 0; value[i] != '\0'; i++) {
+        if (value[i] == '.') {
+          i_point = i;
+        }
+      }
+
+      if (accuracy < 6) {
+        int accuracy_numb = value[i_point + accuracy + 1] - '0';
+        if (accuracy_numb >= 5) {  // мб > 5
+          double accuracy_unit = 1.0;
+          for (int i = 0; i < accuracy; ++i) {
+            accuracy_unit /= 10;
+          }
+          if (our_numb >= 0) {
+            our_numb += accuracy_unit;
+          } else {
+            our_numb -= accuracy_unit;
+          }
+        }
+        char *out_str = s21_float_to_string(our_numb);
+        for (int i = 0;; i++) {
+          if (out_str[i] == '.') {
+            i_point = i;
+            break;
+          }
+          if (out_str[i] == '\0') {
+            break;
+          }
+        }
+        out_str[i_point + accuracy + 1] = '\0';
+        for (int i = 0;; i++) {
+          if (out_str[i] == '\0') {
+            value[i] = '\0';
+            break;
+          } else {
+            value[i] = out_str[i];
+          }
+        }
+        free(out_str);
+        return value;
+      }
+      return value;
+    } else {
+      int raz = accuracy - 6;
+      int zero = s21_strlen(value);
+      value = (char *)realloc(value, zero + raz + 1);
+      value[zero + raz] = '\0';
+      for (int i = zero; i < zero + raz; i++) {
+        value[i] = '0';
+      }
+      value[zero + raz] = '\0';
+      return value;
+    }
+  } else {
+    return value;
+  }
+}
 
 double s21_atof(const char *str) {
   int ind = 0;
