@@ -6,6 +6,38 @@ char *s21_int_to_string(int x);
 void s21_reverse(char *str);
 double s21_atof(const char *str);
 char *s21_accuracy(term *t, char *value);
+char *s21_flag_plus_space(term *t, char *value);
+
+char *s21_flag_plus_space(term *t, char *value) {
+  if (value[0] == '-' || (t->flag_plus != '+' && t->flag_space != ' ')) {
+    return value;
+  } else if (t->flag_plus == '+') {
+    int len = (int)s21_strlen(value);
+    char temp[len];
+    for (int i = 0; i < len; i++) {
+      temp[i] = value[i];
+    }
+    value = (char *)realloc(value, len + 2);
+    for (int i = 1; i < len + 1; i++) {
+      value[i] = temp[i - 1];
+    }
+    value[len + 1] = '\0';
+    value[0] = '+';
+  } else if (t->flag_space == ' ') {
+    int len = (int)s21_strlen(value);
+    char temp[len];
+    for (int i = 0; i < len; i++) {
+      temp[i] = value[i];
+    }
+    value = (char *)realloc(value, len + 2);
+    for (int i = 1; i < len + 1; i++) {
+      value[i] = temp[i - 1];
+    }
+    value[len + 1] = '\0';
+    value[0] = ' ';
+  }
+  return value;
+}
 
 char *s21_accuracy(term *t, char *value) {
   if (t->accuracy != -1) {
