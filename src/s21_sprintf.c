@@ -7,6 +7,43 @@ void s21_reverse(char *str);
 double s21_atof(const char *str);
 char *s21_accuracy(term *t, char *value);
 char *s21_flag_plus_space(term *t, char *value);
+char *s21_width(term *t, char *value);
+
+char *s21_width(term *t, char *value) {
+  if (t->width == -1) {
+    return value;
+  } else if ((int)s21_strlen(value) >= t->width) {
+    return value;
+  } else {
+    int len = (int)s21_strlen(value);
+    if (t->flag_minus == '-') {
+      value = (char *)realloc(value, (s21_size_t)t->width + 1);
+      for (int i = len; i < t->width + 1; i++) {
+        value[i] = ' ';
+      }
+      value[t->width] = '\0';
+      return value;
+    } else {
+      char *origin = (char *)malloc((s21_size_t)len);
+      for (int i = 0; i < len; i++) {
+        origin[i] = value[i];
+      }
+      value = (char *)realloc(value, (s21_size_t)(t->width + 1));
+      for (int i = 0; i < t->width + 1; i++) {
+        value[i] = ' ';
+      }
+      value[t->width] = '\0';
+      int i_ = t->width;
+      for (int i = len; i > -1; i--) {
+        value[i_] = origin[i];
+        i_--;
+      }
+      free(origin);
+      value[t->width] = '\0';
+      return value;
+    }
+  }
+}
 
 char *s21_flag_plus_space(term *t, char *value) {
   if (value[0] == '-' || (t->flag_plus != '+' && t->flag_space != ' ')) {
