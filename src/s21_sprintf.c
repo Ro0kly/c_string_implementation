@@ -8,6 +8,55 @@ double s21_atof(const char *str);
 char *s21_accuracy(term *t, char *value);
 char *s21_flag_plus_space(term *t, char *value);
 char *s21_width(term *t, char *value);
+char *s21_parser_u(char *str_pars, unsigned value);
+char *s21_parser_d(char *str_pars, int value);
+
+char *s21_parser_d(char *str_pars, int value) {
+  term t = {0};
+  t.accuracy = -1;
+  t.width = -1;
+  t.flag_minus = '0';
+  t.flag_plus = '0';
+  t.flag_space = '0';
+  t.length = '0';
+
+  char *full_parser_str = s21_int_to_string(value);
+
+  int value_width = 0;
+  for (int i = 0; str_pars[i] != '\0'; i++) {
+    switch (str_pars[i]) {
+      case '+':
+        t.flag_plus = '+';
+        break;
+      case '-':
+        t.flag_minus = '-';
+        break;
+      case ' ':
+        t.flag_space = ' ';
+        break;
+      case 'h':
+        t.length = 'h';
+        break;
+      case 'l':
+        t.length = 'l';
+        break;
+      default: {
+        if (str_pars[i] >= '0' && str_pars[i] <= '9') {
+          int a = str_pars[i] - '0';
+          value_width = value_width * 10 + a;
+        }
+      } break;
+    }
+  }
+  if (value_width != 0) t.width = value_width;
+  full_parser_str = s21_flag_plus_space(&t, full_parser_str);
+  full_parser_str = s21_width(&t, full_parser_str);
+  return full_parser_str;
+}
+
+char *s21_parser_u(char *str_pars, unsigned value) {
+  return s21_parser_d(str_pars, value);
+}
 
 char *s21_width(term *t, char *value) {
   if (t->width == -1) {
