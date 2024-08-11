@@ -11,6 +11,36 @@ char *s21_width(term *t, char *value);
 char *s21_parser_u(char *str_pars, unsigned value);
 char *s21_parser_s(char *str_pars, char *value);
 char *s21_parser_d(char *str_pars, int value);
+char *s21_parser_c(char *str_pars, char value);
+
+char *s21_parser_c(char *str_pars, char value) {
+  term t = {0};
+  t.accuracy = -1;
+  t.width = -1;
+  t.flag_minus = '0';
+  t.flag_plus = '0';
+  t.flag_space = '0';
+  t.length = '0';
+  char *full_parser_str = s21_char_to_string(value);
+  for (int i = 0; str_pars[i] != '\0'; i++) {
+    if (str_pars[i] == 'l') {
+      t.length = 'l';
+    }
+    if (str_pars[i] == '-') {
+      t.flag_minus = '-';
+    }
+  }
+  int value_width = 0;
+  for (int i = 0; str_pars[i] != '\0'; i++) {
+    if (str_pars[i] <= '9' && str_pars[i] >= '0') {
+      int a = str_pars[i] - '0';
+      value_width = value_width * 10 + a;
+    }
+  }
+  if (value_width != 0) t.width = value_width;
+  full_parser_str = s21_width(&t, full_parser_str);
+  return full_parser_str;
+}
 
 char *s21_parser_s(char *str_pars, char *value) {
   term t = {0};
