@@ -12,6 +12,167 @@ char *s21_parser_u(char *str_pars, unsigned value);
 char *s21_parser_s(char *str_pars, char *value);
 char *s21_parser_d(char *str_pars, int value);
 char *s21_parser_c(char *str_pars, char value);
+char *s21_parser_f(char *str_pars, double value);
+
+char *s21_parser_f(char *str_pars, double value) {
+  term t = {0};
+  t.accuracy = -1;
+  t.width = -1;
+  t.flag_minus = '0';
+  t.flag_plus = '0';
+  t.flag_space = '0';
+  t.length = '0';
+  int i_point = -1;
+  int width = 0;
+  char *full_parser_str = s21_float_to_string(value);
+  for (int i = 0; str_pars[i] != '\0'; i++) {
+    if (str_pars[i] == '.') {
+      i_point = i;
+      break;
+    }
+    if (str_pars[i] <= '9' && str_pars[i] >= '0') {
+      width = 1;
+    }
+  }
+  if (i_point == -1 && width == 0) {
+    for (int i = 0; str_pars[i] != '\0'; i++) {
+      if (str_pars[i] == 'f') break;
+      switch (str_pars[i]) {
+        case '+':
+          t.flag_plus = '+';
+          break;
+        case '-':
+          t.flag_minus = '-';
+          break;
+        case ' ':
+          t.flag_space = ' ';
+          break;
+        case 'h':
+          t.length = 'h';
+          break;
+        case 'l':
+          t.length = 'l';
+          break;
+        default:
+          break;
+      }
+    }
+  } else if (i_point != -1 && width == 0) {
+    for (int i = 0; i < i_point; i++) {
+      if (str_pars[i] == '+') {
+        t.flag_plus = '+';
+      } else if (str_pars[i] == '-') {
+        t.flag_minus = '-';
+      } else if (str_pars[i] == ' ') {
+        t.flag_space = ' ';
+      }
+    }
+    int i_end_accuracy = -1;
+    int value_accuracy = 0;
+    for (int i = i_point + 1;; i++) {
+      if (str_pars[i] >= '0' && str_pars[i] <= '9') {
+        int a = str_pars[i] - '0';
+        value_accuracy = value_accuracy * 10 + a;
+      } else {
+        i_end_accuracy = i;
+        t.accuracy = value_accuracy;
+        break;
+      }
+    }
+    for (int i = i_end_accuracy; str_pars[i] != '\0'; i++) {
+      if (str_pars[i] == 'h') {
+        t.length = 'h';
+        break;
+      } else if (str_pars[i] == 'l') {
+        t.length = 'l';
+        break;
+      }
+    }
+  } else if (i_point == -1 && width) {
+    int i_start_width = 0;
+    for (int i = 0;; i++) {
+      if (str_pars[i] <= '9' && str_pars[i] >= '0') {
+        i_start_width = i;
+        break;
+      } else {
+        if (str_pars[i] == '+') {
+          t.flag_plus = '+';
+        } else if (str_pars[i] == '-') {
+          t.flag_minus = '-';
+        } else if (str_pars[i] == ' ') {
+          t.flag_space = ' ';
+        }
+      }
+    }
+    int i_end_width = 0;
+    int value_width = 0;
+    for (int i = i_start_width;; i++) {
+      if (str_pars[i] <= '9' && str_pars[i] >= '0') {
+        int a = str_pars[i] - '0';
+        value_width = value_width * 10 + a;
+      } else {
+        i_end_width = i;
+        break;
+      }
+    }
+    t.width = value_width;
+    for (int i = i_end_width; str_pars[i] != '\0'; i++) {
+      if (str_pars[i] == 'h') {
+        t.length = 'h';
+        break;
+      } else if (str_pars[i] == 'l') {
+        t.length = 'l';
+        break;
+      }
+    }
+  } else {
+    int i_start_width = 0;
+    for (int i = 0;; i++) {
+      if (str_pars[i] <= '9' && str_pars[i] >= '0') {
+        i_start_width = i;
+        break;
+      } else {
+        if (str_pars[i] == '+') {
+          t.flag_plus = '+';
+        } else if (str_pars[i] == '-') {
+          t.flag_minus = '-';
+        } else if (str_pars[i] == ' ') {
+          t.flag_space = ' ';
+        }
+      }
+    }
+    int value_width = 0;
+    for (int i = i_start_width; i < i_point; i++) {
+      int a = str_pars[i] - '0';
+      value_width = value_width * 10 + a;
+    }
+    t.width = value_width;
+    int value_accuracy = 0;
+    int i_end_accuracy = 0;
+    for (int i = i_point + 1;; i++) {
+      if (str_pars[i] <= '9' && str_pars[i] >= '0') {
+        value_accuracy = value_accuracy * 10 + (int)(str_pars[i] - '0');
+      } else {
+        i_end_accuracy = i;
+        break;
+      }
+    }
+    t.accuracy = value_accuracy;
+    for (int i = i_end_accuracy; str_pars[i] != '\0'; i++) {
+      if (str_pars[i] == 'h') {
+        t.length = 'h';
+        break;
+      } else if (str_pars[i] == 'l') {
+        t.length = 'l';
+        break;
+      }
+    }
+  }
+  full_parser_str = s21_accuracy(&t, full_parser_str);
+  full_parser_str = s21_flag_plus_space(&t, full_parser_str);
+  full_parser_str = s21_width(&t, full_parser_str);
+  return full_parser_str;
+}
 
 char *s21_parser_c(char *str_pars, char value) {
   term t = {0};
