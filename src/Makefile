@@ -11,6 +11,13 @@ s21_string.a: clean
 	$(CC) $(GCCFLAGS) -c $(LIB_SOURCES)
 	ar rcs s21_string.a *.o
 
+gcov_report: clean s21_string.a
+	$(CC) $(GCCFLAGS) $(TESTFLAGS) $(GCOVFLAGS) $(LIB_SOURCES) test_s21_string.c -o gcovreport
+	./gcovreport
+	lcov -t "gcovreport" -o gcovreport.info -c -d .
+	genhtml -o report gcovreport.info
+	open report/index.html
+
 clean:
 	rm -rf *.o *.a *.gcda *.gcno *.gcov ./report *.info gcovreport *.out
 
