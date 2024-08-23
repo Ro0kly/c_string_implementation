@@ -1,15 +1,3 @@
-// cd /opt/goinfre/poochied
-// git clone https://github.com/Homebrew/brew homebrew
-// eval "$(/opt/goinfre/poochied/homebrew/bin/brew shellenv)"
-// brew update --force --quiet
-// chmod -R go-w "$(brew --prefix)/share/zsh"
-// brew install check
-// cd /Users/poochied/Desktop/C2_s21_stringplus-1/src
-// export CPATH=/opt/goinfre/poochied/homebrew/include
-// export LIBRARY_PATH=/opt/goinfre/poochied/homebrew/lib
-
-// export CPATH=/opt/homebrew/include; export LIBRARY_PATH=/opt/homebrew/lib
-
 #include <check.h>
 #include <string.h>
 
